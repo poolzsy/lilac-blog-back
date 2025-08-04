@@ -2,7 +2,7 @@ server:
   port: 9696
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/blog?CharacterEncoding=utf8&serviceTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/lilac_blog?CharacterEncoding=utf8&serviceTimezone=Asia/Shanghai
     username: root
     password: 757520
     driver-class-name: com.mysql.cj.jdbc.Driver
