@@ -1,6 +1,7 @@
 package com.lilac.controller;
 
 import com.lilac.enums.AppHttpCodeEnum;
+import com.lilac.exception.SystemException;
 import com.lilac.pojo.entity.User;
 import com.lilac.pojo.result.ResponseResult;
 import com.lilac.service.AdminLoginService;
@@ -22,9 +23,8 @@ public class LoginController {
     public ResponseResult login(@RequestBody User user) {
         log.info("用户登录：{}", user);
         if(!StringUtils.hasText(user.getUserName())){
-            return ResponseResult.errorResult(AppHttpCodeEnum.REQUIRE_USERNAME);
+            throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
         }
-        ResponseResult login = adminLoginService.login(user);
-        return ResponseResult.okResult(login);
+        return adminLoginService.login(user);
     }
 }

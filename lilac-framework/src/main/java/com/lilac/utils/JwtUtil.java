@@ -18,7 +18,7 @@ public class JwtUtil {
     // 有效期为24小时
     public static final Long JWT_TTL = 24 * 60 * 60 * 1000L;
     // 设置秘钥明文
-    public static final String JWT_KEY = "lilac";
+    public static final String JWT_KEY = "lilac-blog-secret-key-for-jwt-token-generation-123456";
 
     public static String getUUID() {
         return UUID.randomUUID().toString().replaceAll("-", "");
@@ -57,9 +57,9 @@ public class JwtUtil {
         return Jwts.builder()
                 .setId(uuid)
                 .setSubject(subject)
-                .setIssuer("sg")
+                .setIssuer("lilac")
                 .setIssuedAt(now)
-                .signWith(secretKey) // 【已修改】使用新的 signWith 方法
+                .signWith(secretKey)
                 .setExpiration(expDate);
     }
 
@@ -80,7 +80,6 @@ public class JwtUtil {
      * @return
      */
     public static SecretKey generalKey() {
-        // 【已修改】使用新的、类型安全的方式生成密钥
         byte[] keyBytes = JWT_KEY.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -103,7 +102,7 @@ public class JwtUtil {
 
     public static void main(String[] args) {
         // 使用新方法创建一个示例token
-        String subject = "{\"userId\":\"123\"}";
+        String subject = "{\"userId\":\"123456\"}";
         String token = createJWT(subject);
         System.out.println("Generated Token: " + token);
 
