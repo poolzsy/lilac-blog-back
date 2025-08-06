@@ -26,7 +26,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         } else if (authException instanceof InsufficientAuthenticationException) {
             result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }else {
-            result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR.getCode(), "认证或授权失败        ");
+            result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR.getCode(), "认证或授权失败");
         }
         // 响应给前端
         WebUtils.renderString(response, JSON.toJSONString(result));

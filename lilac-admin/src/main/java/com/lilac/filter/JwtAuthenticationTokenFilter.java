@@ -31,13 +31,19 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 获取请求头中的token
-        String token = request.getHeader("token");
-        if (!StringUtils.hasText(token)) {
-            // 放行
+        // 从"Authorization" 请求头获取 token 字符串
+        String authHeader = request.getHeader("Authorization");
+
+        // 校验 "Authorization" 头是否存在且格式正确 (以 "Bearer " 开头)
+        if (!StringUtils.hasText(authHeader) || !authHeader.startsWith("Bearer ")) {
+            // 如果没有 token 或格式不正确，直接放行，后续过滤器会处理
             filterChain.doFilter(request, response);
             return;
         }
+
+        // 提取真正的 token ("Bearer " 后面部分)
+        String token = authHeader.substring(7);
+
         // 解析获取userid
         Claims claims = null;
         try {
@@ -58,7 +64,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);
